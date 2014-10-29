@@ -52,6 +52,11 @@ def get_movie_file_name(folder):
 
 
 def get_configure():
+    """
+    读取配置文件
+
+    :return:
+    """
     try:
         config = ConfigParser.SafeConfigParser()
         filename = "movie_subs.ini"
@@ -67,6 +72,12 @@ def get_configure():
 
 
 def start_get_movie_subs(scan_dir):
+    """
+    扫描目录中的文件
+    递归的扫描目录中的子目录以及文件
+    :param scan_dir:
+    :return:
+    """
     if scan_dir is None:
         return
 
@@ -75,6 +86,8 @@ def start_get_movie_subs(scan_dir):
         print path
         if os.path.isdir(path):
             start_get_movie_subs(path)
+        else:
+            pass
 
 
 def main():
