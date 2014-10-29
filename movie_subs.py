@@ -71,6 +71,21 @@ def get_configure():
         return None, None, None
 
 
+def deal_with_file(filename):
+    """
+    处理单个文件
+    :param filename:
+    """
+    if filename is None:
+        return
+
+    filename_split = filename.split('.')
+    if len(filename_split) < 2:
+        return
+
+
+
+
 def start_get_movie_subs(scan_dir):
     """
     扫描目录中的文件
@@ -81,18 +96,18 @@ def start_get_movie_subs(scan_dir):
     if scan_dir is None:
         return
 
-    for lists in os.listdir(scan_dir):
-        path = os.path.join(scan_dir, lists)
+    for filename in os.listdir(scan_dir):
+        path = os.path.join(scan_dir, filename)
         print path
         if os.path.isdir(path):
             start_get_movie_subs(path)
         else:
-            pass
+            deal_with_file(path)
 
 
 def main():
     # noinspection PyGlobalUndefined
-    global root_dir, movie_suffix, subs_suffix
+    global root_dir, movie_suffix, subs_suffix, subs_suffix_list, movies_suffix_list
 
     # 读取配置文件
     root_dir, movie_suffix, subs_suffix = get_configure()
@@ -100,6 +115,9 @@ def main():
         logging.error('GetConfigure fail!')
         print u'获取配置参数失败，请检查movie_subs.ini中配置是否正确！\n'
         return
+
+    subs_suffix_list = subs_suffix.split(',')
+    movies_suffix_list = movie_suffix.split(',')
 
     root_dir_list = root_dir.split(',')
     for scan_dir in root_dir_list:
