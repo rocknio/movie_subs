@@ -5,6 +5,7 @@ __author__ = 'syn'
 
 import os
 import urllib
+import io
 import ConfigParser
 import logging
 
@@ -26,7 +27,19 @@ def gen_movie_hash(filename):
     if filename is None:
         return
 
+    try:
+        f = open(filename, 'rb')
+        if len(f) < 8192:
+            return ""
 
+        offset1 = f.seek(4096)
+        offset2 = len(f) / 3
+        offset3 = (len(f) / 3) * 2
+        offset4 = len(f) - 8192
+
+
+    except Exception, e:
+        logging.error('open file {%s} fail! err = %s', e[0])
 
     return movie_hash
 
