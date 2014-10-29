@@ -19,7 +19,7 @@ def gen_movie_hash():
 
 def do_shooter_api():
     """
-    调用射手网ＡＰＩ
+    调用射手网API
 
     """
     pass
@@ -27,8 +27,8 @@ def do_shooter_api():
 
 def get_folder_list(folder):
     """
-    获取ｉｎｉ配置文件里ｆｏｌｄｅｒ目录下的子目录列表
-    包括配置的ｆｏｌｄｅｒ本身
+    获取INI配置文件里FOLDER目录下的子目录列表
+    包括配置的FOLDER本身
 
     """
     pass
