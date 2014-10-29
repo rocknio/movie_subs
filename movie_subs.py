@@ -5,6 +5,15 @@ __author__ = 'syn'
 
 import os
 import urllib
+import ConfigParser
+import logging
+
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s %(levelname)s %(module)s.%(funcName)s Line:%(lineno)d -- %(message)s',
+    filename='./movie_subs.log',
+)
 
 
 def gen_movie_hash():
@@ -40,3 +49,49 @@ def get_movie_file_name(folder):
     :param folder:
     """
     pass
+
+
+def get_configure():
+    try:
+        config = ConfigParser.SafeConfigParser()
+        filename = "movie_subs.ini"
+        config.read(filename)
+
+        folder = config.get("FOLDER", "folder")
+        subs = config.get("SUFFIX", "subs")
+        movies = config.get("SUFFIX", "movies")
+
+        return folder, subs, movies
+    except Exception:
+        return None, None, None
+
+
+def start_get_movie_subs(scan_dir):
+    if scan_dir is None:
+        return
+
+    for lists in os.listdir(scan_dir):
+        path = os.path.join(scan_dir, lists)
+        print path
+        if os.path.isdir(path):
+            start_get_movie_subs(path)
+
+
+def main():
+    # noinspection PyGlobalUndefined
+    global root_dir, movie_suffix, subs_suffix
+
+    # 读取配置文件
+    root_dir, movie_suffix, subs_suffix = get_configure()
+    if root_dir is None:
+        logging.error('GetConfigure fail!')
+        print u'获取配置参数失败，请检查movie_subs.ini中配置是否正确！\n'
+        return
+
+    root_dir_list = root_dir.split(',')
+    for scan_dir in root_dir_list:
+        start_get_movie_subs(scan_dir)
+
+
+if __name__ == '__main__':
+    main()
