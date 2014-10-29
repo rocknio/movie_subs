@@ -16,14 +16,19 @@ logging.basicConfig(
 )
 
 
-def gen_movie_hash():
+def gen_movie_hash(filename):
     """
     计算文件hash,算法:
     取文件第4k位置，再根据floor( 文件总长度/3 )计算，取中间2处，
     再取文件结尾倒数第8k的位置， 4个位置各取4k区块做md5。
     共得到4个md5值，均设为索引。可以进行智能匹配。 （可以应用于不完全下载的p2p文件）
     """
-    pass
+    if filename is None:
+        return
+
+
+
+    return movie_hash
 
 
 def do_shooter_api():
@@ -79,10 +84,17 @@ def deal_with_file(filename):
     if filename is None:
         return
 
+    # 以.分割文件名，如果没有，表示文件名格式不正确
     filename_split = filename.split('.')
     if len(filename_split) < 2:
         return
 
+    # 如果后缀不在需要处理的范围内，不做处理
+    if filename_split[1] not in movies_suffix_list:
+        return
+
+    # 计算文件hash
+    shotter_hash = gen_movie_hash(filename)
 
 
 
