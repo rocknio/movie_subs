@@ -8,6 +8,7 @@ import urllib
 import io
 import ConfigParser
 import logging
+import hashlib
 
 
 logging.basicConfig(
@@ -15,6 +16,17 @@ logging.basicConfig(
     format='%(asctime)s %(levelname)s %(module)s.%(funcName)s Line:%(lineno)d -- %(message)s',
     filename='./movie_subs.log',
 )
+
+
+def md5(content):
+    """
+    MD5加密
+    :param content:
+    :return:
+    """
+    m = hashlib.md5
+    m.update(content)
+    return m.hexdigest
 
 
 def gen_movie_hash(filename):
@@ -27,46 +39,46 @@ def gen_movie_hash(filename):
     if filename is None:
         return
 
+    movie_hash = ""
+
+    # 计算需要计算hash的4个位置
+    file_length = os.path.getsize(filename)
+    if file_length < 8192:
+        logging.info(u"文件小于8K，略过 [%s]", filename)
+        return
+
+    offsets = [4096, file_length / 3, (file_length / 3) * 2, file_length - 8192]
+
     try:
         f = open(filename, 'rb')
-        if len(f) < 8192:
-            return ""
+        for one_offset in offsets:
+            f.seek(one_offset, io.SEEK_SET)
+            buf = f.read(4096)
+            md5_string = md5(buf)
 
-        offset1 = f.seek(4096)
-        offset2 = len(f) / 3
-        offset3 = (len(f) / 3) * 2
-        offset4 = len(f) - 8192
+            if movie_hash != "":
+                movie_hash += u';'
+            movie_hash += md5_string
 
-
+        f.close()
     except Exception, e:
         logging.error('open file {%s} fail! err = %s', e[0])
 
     return movie_hash
 
 
-def do_shooter_api():
+def do_shooter_api(filename, shooter_hash):
     """
     调用射手网API
 
     """
-    pass
+    if filename == "" or shooter_hash == "":
+        return False
 
+    p = {"filehash": shooter_hash, "pathinfo": filename, "format": "json", "lang": "Chn"}
+    params = urllib.urlencode(p)
 
-def get_folder_list(folder):
-    """
-    获取INI配置文件里FOLDER目录下的子目录列表
-    包括配置的FOLDER本身
-
-    """
-    pass
-
-
-def get_movie_file_name(folder):
-    """
-    获取目录下文件列表
-    :param folder:
-    """
-    pass
+    return True
 
 
 def get_configure():
@@ -107,8 +119,14 @@ def deal_with_file(filename):
         return
 
     # 计算文件hash
-    shotter_hash = gen_movie_hash(filename)
+    shooter_hash = gen_movie_hash(filename)
+    if shooter_hash == "":
+        return
 
+    # 从shooter.com.cn获取字母文件url
+    ret = do_shooter_api(filename, shooter_hash)
+    if ret is not True:
+        logging.warn(u"获取字幕失败，[%s -- %s]", filename, shooter_hash)
 
 
 def start_get_movie_subs(scan_dir):
