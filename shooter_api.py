@@ -58,7 +58,6 @@ class Shooter(object):
                     print u'写入字幕文件：' + u'%s' % out_filename + u'\n'
                     output.write(download_content)
 
-
     def __init__(self, params):
         """
         Constructor
