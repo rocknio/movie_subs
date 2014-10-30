@@ -5,15 +5,7 @@ __author__ = 'syn'
 
 import os
 import ConfigParser
-import logging
 from shooter_api import Shooter
-
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s %(levelname)s %(module)s.%(funcName)s Line:%(lineno)d -- %(message)s',
-    filename='./movie_subs.log',
-)
 
 
 def get_configure():
@@ -94,7 +86,6 @@ def main():
     # 读取配置文件
     root_dir, subs_suffix, movie_suffix = get_configure()
     if root_dir is None:
-        logging.error('GetConfigure fail!')
         print u'获取配置参数失败，请检查movie_subs.ini中配置是否正确！\n'
         return
 
