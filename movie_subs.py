@@ -61,7 +61,7 @@ def start_get_movie_subs(scan_dir):
 
     for filename in os.listdir(scan_dir):
         path = os.path.join(scan_dir, filename)
-        print path
+        print u'%s' % path
         if os.path.isdir(path):
             start_get_movie_subs(path)
         else:
