@@ -32,7 +32,7 @@ class Shooter(object):
         # 解析返回的json串
         json_content = json.loads(content)
         for idx_i, i in enumerate(json_content):
-            print(i)
+            # print(i)
 
             # 如果有delay文件，进行处理
             if i["Delay"] != 0:
@@ -55,6 +55,7 @@ class Shooter(object):
 
                 # 写字幕文件
                 with open(out_filename, 'wb') as output:
+                    print u'写入字幕文件：' + u'%s' % out_filename + u'\n'
                     output.write(download_content)
 
 
