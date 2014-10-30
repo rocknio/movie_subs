@@ -37,7 +37,7 @@ def deal_with_file(filename):
         return
 
     # 以.分割文件名，如果没有，表示文件名格式不正确
-    filename_split = filename.split('.')
+    filename_split = os.path.splitext(filename)
     if len(filename_split) < 2:
         return
 
@@ -45,6 +45,8 @@ def deal_with_file(filename):
     if filename_split[1] not in movies_suffix_list:
         return
 
+    # 开始获取字幕文件
+    print u'开始处理：' + u'%s' % filename + u'\n'
     shooter = Shooter(filename)
     shooter.start()
 
