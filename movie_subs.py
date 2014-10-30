@@ -6,6 +6,7 @@ __author__ = 'syn'
 import os
 import ConfigParser
 from shooter_api import Shooter
+import glob
 
 
 def get_configure():
@@ -43,8 +44,9 @@ def deal_with_file(filename):
 
     # 判断是否已经有字幕
     for suffix in subs_suffix_list:
-        subs_filename = filename_split[0] + suffix
-        if os.path.isfile(subs_filename) is True:
+        pattern = filename_split[0] + u'*' + suffix
+        for subs_file in glob.iglob(pattern):
+            print u'字幕已经存在：' + u'%s' % subs_file + u'\n'
             return
 
     # 如果后缀不在需要处理的范围内，不做处理
@@ -69,7 +71,7 @@ def start_get_movie_subs(scan_dir):
 
     for filename in os.listdir(scan_dir):
         path = os.path.join(scan_dir, filename)
-        print u'%s' % path
+        # print u'%s' % path
         if os.path.isdir(path):
             start_get_movie_subs(path)
         else:
@@ -91,6 +93,7 @@ def main():
 
     root_dir_list = root_dir.split(',')
     for scan_dir in root_dir_list:
+        print u'开始处理目录：' + u'%s' % scan_dir
         start_get_movie_subs(scan_dir)
 
 
