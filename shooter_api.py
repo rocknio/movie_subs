@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 __author__ = 'Syn'
 
 from Shooter_hash import ShooterHash

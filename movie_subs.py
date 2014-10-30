@@ -4,12 +4,9 @@ __author__ = 'syn'
 
 
 import os
-import urllib
-import httplib
-import io
 import ConfigParser
 import logging
-import hashlib
+from shooter_api import Shooter
 
 
 logging.basicConfig(
@@ -17,83 +14,6 @@ logging.basicConfig(
     format='%(asctime)s %(levelname)s %(module)s.%(funcName)s Line:%(lineno)d -- %(message)s',
     filename='./movie_subs.log',
 )
-
-
-def gen_movie_hash(filename):
-    """
-    计算文件hash,算法:
-    取文件第4k位置，再根据floor( 文件总长度/3 )计算，取中间2处，
-    再取文件结尾倒数第8k的位置， 4个位置各取4k区块做md5。
-    共得到4个md5值，均设为索引。可以进行智能匹配。 （可以应用于不完全下载的p2p文件）
-    """
-    if filename is None:
-        return
-
-    movie_hash = ""
-
-    # 计算需要计算hash的4个位置
-    file_length = os.path.getsize(filename)
-    if file_length < 8192:
-        logging.info(u"文件小于8K，略过 [%s]", filename)
-        return
-
-    offsets = [4096, file_length / 3 * 2, file_length / 3, file_length - 8192]
-
-    md5 = hashlib.md5()
-    try:
-        f = open(filename, 'rb')
-        for one_offset in offsets:
-            f.seek(one_offset, io.SEEK_SET)
-            buf = f.read(4096)
-            md5.update(buf)
-            md5_string = md5.hexdigest()
-
-            if movie_hash != "":
-                movie_hash += u';'
-            movie_hash += md5_string
-
-        f.close()
-    except Exception, e:
-        logging.error('open file {%s} fail! err = %s', e.message)
-
-    return movie_hash
-
-
-def do_shooter_api(filename, shooter_hash):
-    """
-    调用射手网API
-
-    :param filename:
-    :param shooter_hash:
-    """
-    if filename == "" or shooter_hash == "":
-        return False
-
-    p = {"filehash": shooter_hash, "pathinfo": filename, "format": "json", "lang": "Chn"}
-    params = urllib.urlencode(p)
-
-    exception = None
-    http_client = None
-    try:
-        try:
-            http_client = httplib.HTTPConnection("103.6.84.91")
-            http_client.request(method="POST", url="https://www.shooter.cn/api/subapi.php", body=params)
-            response = http_client.getresponse()
-            if response.status == 200:
-                return response.read()
-            else:
-                logging.error("response code %d, %s" % response.status, response.read())
-                return ""
-        except Exception, err:
-            exception = err
-    finally:
-        if http_client:
-            http_client.close()
-        if exception:
-            logging.error(exception)
-            return ""
-
-    return ""
 
 
 def get_configure():
@@ -144,18 +64,8 @@ def deal_with_file(filename):
     if filename_split[1] not in movies_suffix_list:
         return
 
-    # 计算文件hash
-    shooter_hash = gen_movie_hash(filename)
-    if shooter_hash == "":
-        return
-
-    # 从shooter.com.cn获取字母文件url
-    resp = do_shooter_api(filename, shooter_hash)
-    if resp is "":
-        logging.warn(u"获取字幕失败，[%s -- %s]", filename, shooter_hash)
-
-    # 下载字幕文件
-    do_subs_download(filename, resp)
+    shooter = Shooter(filename)
+    shooter.start()
 
 
 def start_get_movie_subs(scan_dir):
