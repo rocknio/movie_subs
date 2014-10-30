@@ -5,6 +5,7 @@ __author__ = 'syn'
 
 import os
 import urllib
+import httplib
 import io
 import ConfigParser
 import logging
@@ -77,6 +78,27 @@ def do_shooter_api(filename, shooter_hash):
 
     p = {"filehash": shooter_hash, "pathinfo": filename, "format": "json", "lang": "Chn"}
     params = urllib.urlencode(p)
+
+    exception = None
+    http_client = None
+    try:
+        try:
+            http_client = httplib.HTTPConnection("https://www.shooter.cn/api/subapi.php")
+            http_client.request(method="POST", url="https://www.shooter.cn/api/subapi.php", body=params)
+            response = http_client.getresponse()
+            if response.status == 200:
+                return
+            else:
+                logging.warn("response code %d" % response.status)
+                logging.warn("response code %s" % response.read())
+        except Exception, err:
+            exception = err
+    finally:
+        if http_client:
+            http_client.close()
+        if exception:
+            logging.error(exception)
+            return False
 
     return True
 
