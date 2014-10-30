@@ -16,7 +16,7 @@ class ShooterHash(object):
         try:
             f = open(filename, "rb")
         except IOError:
-            print("Cannot read file %s" % filename)
+            print(u'打开文件失败：%s\n' % filename)
 
         # 获取文件长度
         stat_info = os.stat(filename)
