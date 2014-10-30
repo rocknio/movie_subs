@@ -41,6 +41,12 @@ def deal_with_file(filename):
     if len(filename_split) < 2:
         return
 
+    # 判断是否已经有字幕
+    for suffix in subs_suffix_list:
+        subs_filename = filename_split[0] + suffix
+        if os.path.isfile(subs_filename) is True:
+            return
+
     # 如果后缀不在需要处理的范围内，不做处理
     if filename_split[1] not in movies_suffix_list:
         return

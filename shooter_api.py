@@ -47,7 +47,7 @@ class Shooter(object):
                     out_filename_list.insert(2, str(idx_j))
                 out_filename = '.'.join(out_filename_list)
                 download_link = j["Link"]
-                print(download_link)
+                # print(download_link)
 
                 # 开始下载
                 response = urlopen(download_link)
