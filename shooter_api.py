@@ -34,10 +34,13 @@ class Shooter(object):
         for idx_i, i in enumerate(json_content):
             print(i)
 
+            # 如果有delay文件，进行处理
             if i["Delay"] != 0:
                 delay_filename = '.'.join((self.filename, "chn%s" % ("" if idx_i == 0 else idx_i), "delay"))
                 with open(delay_filename, 'w') as output:
                     output.write(str(i["Delay"]))
+
+            # 字幕有可能多个，逐个下载
             for idx_j, j in enumerate(i["Files"]):
                 out_filename_list = [self.filename, "chn%s" % ("" if idx_i == 0 else idx_i), str(j["Ext"])]
                 if len(i["Files"]) != 1:
@@ -45,8 +48,12 @@ class Shooter(object):
                 out_filename = '.'.join(out_filename_list)
                 download_link = j["Link"]
                 print(download_link)
+
+                # 开始下载
                 response = urlopen(download_link)
                 download_content = response.read()
+
+                # 写字幕文件
                 with open(out_filename, 'wb') as output:
                     output.write(download_content)
 
