@@ -28,17 +28,6 @@ def get_configure():
         return None, None, None
 
 
-def do_subs_download(filename, resp):
-    """
-    解析shooter返回的内容，下载对应文件到movie目录
-    :param filename:
-    :param resp:
-    :return:
-    """
-    if filename == "" or resp == "":
-        return
-
-
 def deal_with_file(filename):
     """
     处理单个文件
