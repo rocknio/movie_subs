@@ -19,17 +19,6 @@ logging.basicConfig(
 )
 
 
-def md5(content):
-    """
-    MD5加密
-    :param content:
-    :return:
-    """
-    m = hashlib.md5
-    m.update(content)
-    return m.hexdigest
-
-
 def gen_movie_hash(filename):
     """
     计算文件hash,算法:
@@ -48,14 +37,16 @@ def gen_movie_hash(filename):
         logging.info(u"文件小于8K，略过 [%s]", filename)
         return
 
-    offsets = [4096, file_length / 3, (file_length / 3) * 2, file_length - 8192]
+    offsets = [4096, file_length / 3 * 2, file_length / 3, file_length - 8192]
 
+    md5 = hashlib.md5()
     try:
         f = open(filename, 'rb')
         for one_offset in offsets:
             f.seek(one_offset, io.SEEK_SET)
             buf = f.read(4096)
-            md5_string = md5(buf)
+            md5.update(buf)
+            md5_string = md5.hexdigest()
 
             if movie_hash != "":
                 movie_hash += u';'
@@ -63,7 +54,7 @@ def gen_movie_hash(filename):
 
         f.close()
     except Exception, e:
-        logging.error('open file {%s} fail! err = %s', e[0])
+        logging.error('open file {%s} fail! err = %s', e.message)
 
     return movie_hash
 
@@ -72,6 +63,8 @@ def do_shooter_api(filename, shooter_hash):
     """
     调用射手网API
 
+    :param filename:
+    :param shooter_hash:
     """
     if filename == "" or shooter_hash == "":
         return False
@@ -83,14 +76,14 @@ def do_shooter_api(filename, shooter_hash):
     http_client = None
     try:
         try:
-            http_client = httplib.HTTPConnection("https://www.shooter.cn/api/subapi.php")
+            http_client = httplib.HTTPConnection("103.6.84.91")
             http_client.request(method="POST", url="https://www.shooter.cn/api/subapi.php", body=params)
             response = http_client.getresponse()
             if response.status == 200:
-                return
+                return response.read()
             else:
-                logging.warn("response code %d" % response.status)
-                logging.warn("response code %s" % response.read())
+                logging.error("response code %d, %s" % response.status, response.read())
+                return ""
         except Exception, err:
             exception = err
     finally:
@@ -98,9 +91,9 @@ def do_shooter_api(filename, shooter_hash):
             http_client.close()
         if exception:
             logging.error(exception)
-            return False
+            return ""
 
-    return True
+    return ""
 
 
 def get_configure():
@@ -121,6 +114,17 @@ def get_configure():
         return folder, subs, movies
     except Exception:
         return None, None, None
+
+
+def do_subs_download(filename, resp):
+    """
+    解析shooter返回的内容，下载对应文件到movie目录
+    :param filename:
+    :param resp:
+    :return:
+    """
+    if filename == "" or resp == "":
+        return
 
 
 def deal_with_file(filename):
@@ -146,9 +150,12 @@ def deal_with_file(filename):
         return
 
     # 从shooter.com.cn获取字母文件url
-    ret = do_shooter_api(filename, shooter_hash)
-    if ret is not True:
+    resp = do_shooter_api(filename, shooter_hash)
+    if resp is "":
         logging.warn(u"获取字幕失败，[%s -- %s]", filename, shooter_hash)
+
+    # 下载字幕文件
+    do_subs_download(filename, resp)
 
 
 def start_get_movie_subs(scan_dir):
@@ -175,7 +182,7 @@ def main():
     global root_dir, movie_suffix, subs_suffix, subs_suffix_list, movies_suffix_list
 
     # 读取配置文件
-    root_dir, movie_suffix, subs_suffix = get_configure()
+    root_dir, subs_suffix, movie_suffix = get_configure()
     if root_dir is None:
         logging.error('GetConfigure fail!')
         print u'获取配置参数失败，请检查movie_subs.ini中配置是否正确！\n'
