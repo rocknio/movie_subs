@@ -18,9 +18,11 @@ class ShooterHash(object):
         except IOError:
             print("Cannot read file %s" % filename)
 
+        # 获取文件长度
         stat_info = os.stat(filename)
         file_length = stat_info.st_size
 
+        # 计算4个4K数据的md5，连接成hash值
         ret = []
         for i in (4096, int(file_length / 3) * 2, int(file_length / 3), file_length - 8192):
             f.seek(i, 0)

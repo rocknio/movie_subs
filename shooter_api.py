@@ -12,13 +12,14 @@ class Shooter(object):
     """
     实现射手网api
     """
-
+    # 射手网api的调用url
     shooter_url = "http://shooter.cn/api/subapi.php"
 
+    # 待处理的文件名
     filename = ""
-    movie_hash = ""
 
-    subs_info = []
+    # 文件对应的hash值
+    movie_hash = ""
 
     def start(self):
         self.movie_hash = ShooterHash.compute_file_hash(self.filename)
@@ -28,6 +29,7 @@ class Shooter(object):
         rsp = urlopen(req)
         content = rsp.read().decode('utf-8', 'replace')
 
+        # 解析返回的json串
         json_content = json.loads(content)
         for idx_i, i in enumerate(json_content):
             print(i)
@@ -47,6 +49,7 @@ class Shooter(object):
                 download_content = response.read()
                 with open(out_filename, 'wb') as output:
                     output.write(download_content)
+
 
     def __init__(self, params):
         """
