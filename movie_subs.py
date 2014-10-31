@@ -24,7 +24,7 @@ def get_configure():
         subs = config.get("SUFFIX", "subs")
         movies = config.get("SUFFIX", "movies")
 
-        return folder, subs, movies
+        return u'%s' % folder, u'%s' % subs, u'%s' % movies
     except Exception:
         return None, None, None
 
@@ -42,16 +42,16 @@ def deal_with_file(filename):
     if len(filename_split) < 2:
         return
 
+    # 如果后缀不在需要处理的范围内，不做处理
+    if filename_split[1] not in movies_suffix_list:
+        return
+
     # 判断是否已经有字幕
     for suffix in subs_suffix_list:
         pattern = filename_split[0] + u'*' + suffix
         for subs_file in glob.iglob(pattern):
             print u'字幕已经存在：' + u'%s' % subs_file + u'\n'
             return
-
-    # 如果后缀不在需要处理的范围内，不做处理
-    if filename_split[1] not in movies_suffix_list:
-        return
 
     # 开始获取字幕文件
     print u'开始处理：' + u'%s' % filename + u'\n'
@@ -75,7 +75,7 @@ def start_get_movie_subs(scan_dir):
         if os.path.isdir(path):
             start_get_movie_subs(path)
         else:
-            deal_with_file(path)
+            deal_with_file(u'%s' % path)
 
 
 def main():
