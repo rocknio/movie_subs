@@ -18,11 +18,9 @@ movies=.mkv,.mp4,.avi
 
 
 ## 运行：
-* 编译：
-  python setup.py py2exe
+* 编译： **python setup.py py2exe**
   
-* 运行:
-  **movie_subs.exe**
+* 运行： **movie_subs.exe**
 
 
 ## TODO:
