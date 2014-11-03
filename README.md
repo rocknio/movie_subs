@@ -18,7 +18,11 @@ movies=.mkv,.mp4,.avi
 
 
 ## 运行：
-直接运行**movie_subs.exe**即可
+* 编译：
+  python setup.py py2exe
+  
+* 运行:
+  **movie_subs.exe**
 
 
 ## TODO:
