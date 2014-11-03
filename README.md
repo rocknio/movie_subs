@@ -18,7 +18,7 @@ movies=.mkv,.mp4,.avi
 
 
 ## 运行：
-直接运行movie_subs.exe即可
+直接运行**movie_subs.exe**即可
 
 
 ## TODO:
