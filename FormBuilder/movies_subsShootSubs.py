@@ -9,6 +9,10 @@ class movies_subsShootSubs( movies_subs_gui.ShootSubs ):
 		movies_subs_gui.ShootSubs.__init__( self, parent )
 	
 	# Handlers for ShootSubs events.
+	def do_form_init( self, event ):
+		# TODO: Implement do_form_init
+		pass
+	
 	def do_cancel_click( self, event ):
 		# TODO: Implement do_cancel_click
 		pass

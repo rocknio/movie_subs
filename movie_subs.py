@@ -7,6 +7,8 @@ import os
 import ConfigParser
 from shooter_api import Shooter
 import glob
+import wx
+import movies_subs_gui
 
 
 def get_configure():
@@ -79,6 +81,11 @@ def start_get_movie_subs(scan_dir):
 
 
 def main():
+    app = wx.App()
+    main_frm = movies_subs_gui.ShootSubs(None)
+    main_frm.Show()
+    app.MainLoop()
+
     # noinspection PyGlobalUndefined
     global root_dir, movie_suffix, subs_suffix, subs_suffix_list, movies_suffix_list
 
