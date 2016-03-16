@@ -8,6 +8,7 @@ import ConfigParser
 from shooter_api import Shooter
 import glob
 
+
 def get_configure():
     """
     读取配置文件
@@ -26,6 +27,7 @@ def get_configure():
     except Exception:
         return None, None, None
 
+
 def set_configure_folder(path):
     """
     根据用户选取的目录，更新配置文件
@@ -41,6 +43,7 @@ def set_configure_folder(path):
         config.write(open(filename, "w"))
     except Exception:
         pass
+
 
 # Implementing ShootSubs
 class MoviesSubsShootSubs(movies_subs_gui.ShootSubs):
@@ -65,13 +68,14 @@ class MoviesSubsShootSubs(movies_subs_gui.ShootSubs):
         self.m_rich_log.WriteText(u'movies = %s\n' % self.movie_suffix)
         self.m_rich_log.WriteText(u'************************** Config ************************\n')
 
-    def __init__( self, parent ):
-        movies_subs_gui.ShootSubs.__init__( self, parent )
+    def __init__(self, parent):
+        movies_subs_gui.ShootSubs.__init__(self, parent)
         self.root_dir, self.subs_suffix, self.movie_suffix = None, None, None
         self.subs_suffix_list, self.movies_suffix_list = None, None
-	
+
+
     # Handlers for ShootSubs events.
-    def do_ok_click( self, event ):
+    def do_ok_click(self, event):
         self.m_dirPicker.SetFocus()
         self.root_dir = self.m_dirPicker.GetPath()
         set_configure_folder(self.root_dir)
