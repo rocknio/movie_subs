@@ -61,7 +61,7 @@
             <event name="OnAuiPaneRestore"></event>
             <event name="OnAuiRender"></event>
             <event name="OnChar"></event>
-            <event name="OnClose"></event>
+            <event name="OnClose">do_close</event>
             <event name="OnEnterWindow"></event>
             <event name="OnEraseBackground"></event>
             <event name="OnHibernate"></event>
@@ -441,8 +441,8 @@
                                 <event name="OnKillFocus"></event>
                                 <event name="OnLeaveWindow"></event>
                                 <event name="OnLeftDClick"></event>
-                                <event name="OnLeftDown"></event>
-                                <event name="OnLeftUp">do_ok_click</event>
+                                <event name="OnLeftDown">do_ok_click</event>
+                                <event name="OnLeftUp"></event>
                                 <event name="OnMiddleDClick"></event>
                                 <event name="OnMiddleDown"></event>
                                 <event name="OnMiddleUp"></event>

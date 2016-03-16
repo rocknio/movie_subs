@@ -71,6 +71,7 @@ class ShootSubs ( wx.Dialog ):
 		self.Centre( wx.BOTH )
 		
 		# Connect Events
+		self.Bind( wx.EVT_CLOSE, self.do_close )
 		self.Bind( wx.EVT_INIT_DIALOG, self.do_init_config )
 		self.m_btn_ok.Bind( wx.EVT_LEFT_DOWN, self.do_ok_click )
 	
@@ -78,7 +79,10 @@ class ShootSubs ( wx.Dialog ):
 		pass
 	
 	
-	# Virtual event handlers, override them in your derived class
+	# Virtual event handlers, overide them in your derived class
+	def do_close( self, event ):
+		event.Skip()
+	
 	def do_init_config( self, event ):
 		event.Skip()
 	

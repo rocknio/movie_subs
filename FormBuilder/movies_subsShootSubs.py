@@ -9,6 +9,10 @@ class movies_subsShootSubs( movies_subs_gui.ShootSubs ):
 		movies_subs_gui.ShootSubs.__init__( self, parent )
 	
 	# Handlers for ShootSubs events.
+	def do_close( self, event ):
+		# TODO: Implement do_close
+		pass
+	
 	def do_init_config( self, event ):
 		# TODO: Implement do_init_config
 		pass
