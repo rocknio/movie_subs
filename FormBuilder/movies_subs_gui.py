@@ -56,7 +56,7 @@ class ShootSubs ( wx.Dialog ):
 		fgSizer2.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		fgSizer2.SetMinSize( wx.Size( 800,520 ) ) 
-		self.m_rich_log = wx.richtext.RichTextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0|wx.VSCROLL|wx.HSCROLL|wx.NO_BORDER|wx.WANTS_CHARS )
+		self.m_rich_log = wx.richtext.RichTextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_READONLY|wx.VSCROLL|wx.HSCROLL|wx.NO_BORDER|wx.WANTS_CHARS )
 		self.m_rich_log.SetMinSize( wx.Size( 800,500 ) )
 		
 		fgSizer2.Add( self.m_rich_log, 1, wx.EXPAND |wx.ALL, 5 )
