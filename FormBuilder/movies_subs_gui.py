@@ -45,14 +45,8 @@ class ShootSubs ( wx.Dialog ):
 		self.m_staticText2.Wrap( -1 )
 		fgSizer3.Add( self.m_staticText2, 0, wx.ALL, 5 )
 		
-		m_sdbSizer1 = wx.StdDialogButtonSizer()
-		self.m_sdbSizer1OK = wx.Button( self, wx.ID_OK )
-		m_sdbSizer1.AddButton( self.m_sdbSizer1OK )
-		self.m_sdbSizer1Cancel = wx.Button( self, wx.ID_CANCEL )
-		m_sdbSizer1.AddButton( self.m_sdbSizer1Cancel )
-		m_sdbSizer1.Realize();
-		
-		fgSizer3.Add( m_sdbSizer1, 1, wx.EXPAND, 5 )
+		self.m_btn_ok = wx.Button( self, wx.ID_ANY, u"OK", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer3.Add( self.m_btn_ok, 0, wx.ALL|wx.ALIGN_RIGHT, 5 )
 		
 		
 		fgSizer1.Add( fgSizer3, 1, wx.EXPAND, 5 )
@@ -77,19 +71,15 @@ class ShootSubs ( wx.Dialog ):
 		self.Centre( wx.BOTH )
 		
 		# Connect Events
-		self.Bind( wx.EVT_INIT_DIALOG, self.do_form_init )
-		self.m_sdbSizer1Cancel.Bind( wx.EVT_BUTTON, self.do_cancel_click )
-		self.m_sdbSizer1OK.Bind( wx.EVT_BUTTON, self.do_ok_click )
+		self.Bind( wx.EVT_INIT_DIALOG, self.do_init_config )
+		self.m_btn_ok.Bind( wx.EVT_LEFT_UP, self.do_ok_click )
 	
 	def __del__( self ):
 		pass
 	
 	
 	# Virtual event handlers, overide them in your derived class
-	def do_form_init( self, event ):
-		event.Skip()
-	
-	def do_cancel_click( self, event ):
+	def do_init_config( self, event ):
 		event.Skip()
 	
 	def do_ok_click( self, event ):
