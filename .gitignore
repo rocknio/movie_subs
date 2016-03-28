@@ -1,1 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
+# 忽略pyinstaller生成的中间文件
+*.spec
+build/*
+
+# 忽略pycharm文件
+.idea/*
