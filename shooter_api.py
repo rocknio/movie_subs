@@ -15,19 +15,14 @@ class Shooter(object):
     # 射手网api的调用url
     shooter_url = "http://shooter.cn/api/subapi.php"
 
-    # 待处理的文件名
-    filename = ""
-
-    # 文件对应的hash值
-    movie_hash = ""
-
     def start(self):
-        self.movie_hash = ShooterHash.compute_file_hash(self.filename)
+        shoot_hash = ShooterHash(self.filename, self.richedit)
+        self.movie_hash = shoot_hash.compute_file_hash()
         values = dict(filehash=self.movie_hash, pathinfo=self.filename, format="json", lang="Chn")
         try:
             data = urlencode(values).encode('utf-8', 'replace')
         except Exception:
-            print u'url 编码失败，跳过文件 ' + u'%s' % self.filename + u'\n'
+            self.richedit.WriteText(u'url 编码失败，跳过文件 ' + u'%s' % self.filename + u'\n')
             return
 
         req = Request(self.shooter_url, data)
@@ -61,13 +56,15 @@ class Shooter(object):
 
                     # 写字幕文件
                     with open(out_filename, 'wb') as output:
-                        print u'写入字幕文件：' + u'%s' % out_filename + u'\n'
+                        self.richedit.WriteText(u'写入字幕文件：' + u'%s' % out_filename + u'\n')
                         output.write(download_content)
         except Exception:
-            print u'获取字幕返回码解析错误\n'
+            self.richedit.WriteText(u'获取字幕返回码解析错误\n')
 
-    def __init__(self, params):
+    def __init__(self, filename, richedit):
         """
         Constructor
         """
-        self.filename = params
+        self.filename = filename
+        self.richedit = richedit
+        self.movie_hash = ""

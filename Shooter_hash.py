@@ -11,15 +11,14 @@ class ShooterHash(object):
     shooter的文件hash计算
     https://docs.google.com/document/d/1w5MCBO61rKQ6hI5m9laJLWse__yTYdRugpVyz4RzrmM/preview#
     """
-    @staticmethod
-    def compute_file_hash(filename):
+    def compute_file_hash(self):
         try:
-            f = open(filename, "rb")
+            f = open(self.filename, "rb")
         except IOError:
-            print(u'打开文件失败：%s\n' % filename)
+            self.richedit.WriteText(u'打开文件失败：%s\n' % self.filename)
 
         # 获取文件长度
-        stat_info = os.stat(filename)
+        stat_info = os.stat(self.filename)
         file_length = stat_info.st_size
 
         # 计算4个4K数据的md5，连接成hash值
@@ -32,7 +31,9 @@ class ShooterHash(object):
 
         return ';'.join(ret)
 
-    def __init__(self):
+    def __init__(self, filename, richedit):
         """
         Constructor
         """
+        self.filename = filename
+        self.richedit = richedit

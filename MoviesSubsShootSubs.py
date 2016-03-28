@@ -7,6 +7,7 @@ import movies_subs_gui
 import ConfigParser
 from shooter_api import Shooter
 import glob
+import time
 
 
 def get_configure():
@@ -85,6 +86,8 @@ class MoviesSubsShootSubs(movies_subs_gui.ShootSubs):
             self.start_get_movie_subs(scan_dir)
 
         self.m_rich_log.WriteText(u'处理完成：' + u'%s\n' % self.root_dir)
+        # 暂停0.1秒，等richedit刷新
+        time.sleep(0.1)
 
     def deal_with_file(self, filename):
         """
@@ -112,7 +115,7 @@ class MoviesSubsShootSubs(movies_subs_gui.ShootSubs):
 
         # 开始获取字幕文件
         self.m_rich_log.WriteText(u'开始处理：' + u'%s' % filename + u'\n')
-        shooter = Shooter(filename)
+        shooter = Shooter(filename, self.m_rich_log)
         shooter.start()
 
 
