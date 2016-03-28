@@ -5,7 +5,7 @@ movie_subs
 ## 配置说明：
 ```ini
 [FOLDER]
-folder=E:\BT\,D:\Movie\
+folder=E:\BT\
 
 [SUFFIX]
 subs=.srt,.ass,.subs,.sub,.idx
