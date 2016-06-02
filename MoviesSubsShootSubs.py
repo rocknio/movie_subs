@@ -86,8 +86,6 @@ class MoviesSubsShootSubs(movies_subs_gui.ShootSubs):
             self.start_get_movie_subs(scan_dir)
 
         self.m_rich_log.WriteText(u'处理完成：' + u'%s\n' % self.root_dir)
-        # 暂停0.1秒，等richedit刷新
-        time.sleep(0.1)
 
     def deal_with_file(self, filename):
         """
@@ -130,6 +128,9 @@ class MoviesSubsShootSubs(movies_subs_gui.ShootSubs):
             return
 
         for filename in os.listdir(scan_dir):
+            # 暂停0.1秒，等richedit刷新
+            time.sleep(0.1)
+
             path = os.path.join(scan_dir, filename)
             if os.path.isdir(path):
                 self.start_get_movie_subs(path)
