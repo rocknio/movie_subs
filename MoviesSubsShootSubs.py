@@ -131,6 +131,7 @@ class MoviesSubsShootSubs(movies_subs_gui.ShootSubs):
             # 暂停0.1秒，等richedit刷新
             time.sleep(0.1)
 
+
             path = os.path.join(scan_dir, filename)
             if os.path.isdir(path):
                 self.start_get_movie_subs(path)
