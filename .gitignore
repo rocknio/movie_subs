@@ -1,11 +1,10 @@
 # Created by .ignore support plugin (hsz.mobi)
 # 忽略pyinstaller生成的中间文件
 *.spec
-build/*
 
 # 忽略pycharm文件
 .idea/*
-将删除 MoviesSubsShootSubs.pyc
-将删除 Shooter_hash.pyc
-将删除 movies_subs_gui.pyc
-将删除 shooter_api.pyc
+MoviesSubsShootSubs.pyc
+Shooter_hash.pyc
+movies_subs_gui.pyc
+shooter_api.pyc

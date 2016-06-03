@@ -132,6 +132,7 @@ class MoviesSubsShootSubs(movies_subs_gui.ShootSubs):
             self.m_rich_log.ScrollLines(-1)
             self.m_rich_log.Update()
 
+
             path = os.path.join(scan_dir, filename)
             if os.path.isdir(path):
                 self.start_get_movie_subs(path)
