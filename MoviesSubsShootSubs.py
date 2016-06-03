@@ -129,7 +129,7 @@ class MoviesSubsShootSubs(movies_subs_gui.ShootSubs):
 
         for filename in os.listdir(scan_dir):
             # 暂停0.1秒，等richedit刷新
-            time.sleep(0.2)
+            time.sleep(0.1)
 
             path = os.path.join(scan_dir, filename)
             if os.path.isdir(path):
