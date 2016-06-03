@@ -7,6 +7,5 @@ build/*
 .idea/*
 MoviesSubsShootSubs.pyc
 Shooter_hash.pyc
-build/
 movies_subs_gui.pyc
 shooter_api.pyc
