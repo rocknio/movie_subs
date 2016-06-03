@@ -4,6 +4,8 @@
 
 # 忽略pycharm文件
 .idea/*
+build/*
+dist/*
 MoviesSubsShootSubs.pyc
 Shooter_hash.pyc
 movies_subs_gui.pyc
