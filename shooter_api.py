@@ -3,8 +3,8 @@
 __author__ = 'Syn'
 
 from Shooter_hash import ShooterHash
-from urllib import urlencode
-from urllib2 import Request, urlopen
+from urllib import parse
+from urllib import request
 import json
 
 
@@ -20,13 +20,13 @@ class Shooter(object):
         self.movie_hash = shoot_hash.compute_file_hash()
         values = dict(filehash=self.movie_hash, pathinfo=self.filename, format="json", lang="Chn")
         try:
-            data = urlencode(values).encode('utf-8', 'replace')
+            data = parse.urlencode(values).encode('utf-8', 'replace')
         except Exception:
             self.richedit.WriteText(u'url 编码失败，跳过文件 ' + u'%s' % self.filename + u'\n')
             return
 
-        req = Request(self.shooter_url, data)
-        rsp = urlopen(req)
+        req = request.Request(self.shooter_url, data)
+        rsp = request.urlopen(req)
         content = rsp.read().decode('utf-8', 'replace')
 
         # 解析返回的json串
@@ -51,7 +51,7 @@ class Shooter(object):
                     # print(download_link)
 
                     # 开始下载
-                    response = urlopen(download_link)
+                    response = request.urlopen(download_link)
                     download_content = response.read()
 
                     # 写字幕文件

@@ -4,58 +4,57 @@
 import wx
 import os
 import movies_subs_gui
-import ConfigParser
+import configparser
 from shooter_api import Shooter
 import glob
-import time
-
-
-def get_configure():
-    """
-    读取配置文件
-    :return:
-    """
-    try:
-        config = ConfigParser.SafeConfigParser()
-        filename = "movie_subs.ini"
-        config.read(filename)
-
-        folder = config.get("FOLDER", "folder")
-        subs = config.get("SUFFIX", "subs")
-        movies = config.get("SUFFIX", "movies")
-
-        return u'%s' % folder, u'%s' % subs, u'%s' % movies
-    except Exception:
-        return None, None, None
-
-
-def set_configure_folder(path):
-    """
-    根据用户选取的目录，更新配置文件
-    :param path:
-    :return:
-    """
-    try:
-        config = ConfigParser.SafeConfigParser()
-        filename = "movie_subs.ini"
-        config.read(filename)
-
-        config.set("FOLDER", "folder", path)
-        config.write(open(filename, "w"))
-    except Exception:
-        pass
 
 
 # Implementing ShootSubs
 class MoviesSubsShootSubs(movies_subs_gui.ShootSubs):
+    def get_configure(self):
+        """
+        读取配置文件
+        :return:
+        """
+        try:
+            config = configparser.ConfigParser()
+            filename = "movie_subs.ini"
+            config.read(filename, encoding='utf8')
+
+            self.root_dir = config.get("FOLDER", "folder")
+            self.subs_suffix = config.get("SUFFIX", "subs")
+            self.movie_suffix = config.get("SUFFIX", "movies")
+            return True
+        except Exception as e:
+            self.m_rich_log.WriteText("解析配置失败，ERROR = {}\n".format(e))
+            self.m_rich_log.ScrollLines(5)
+            return False
+
+    def set_configure_folder(self, path):
+        """
+        根据用户选取的目录，更新配置文件
+        :param path:
+        :return:
+        """
+        try:
+            config = configparser.ConfigParser()
+            filename = "movie_subs.ini"
+            config.read(filename, encoding='utf8')
+
+            config.set("FOLDER", "folder", path)
+            config.write(open(filename, "w", encoding='utf8'))
+            return True
+        except Exception as e:
+            self.m_rich_log.WriteText("保存配置失败，ERROR = {}\n".format(e))
+            self.m_rich_log.ScrollLines(5)
+            return False
+
     def do_close(self, event):
         super(MoviesSubsShootSubs, self).do_close(event)
         wx.GetApp().ExitMainLoop()
 
-    def do_init_config(self, event):
-        super(MoviesSubsShootSubs, self).do_init_config(event)
-        self.root_dir, self.subs_suffix, self.movie_suffix = get_configure()
-        if self.root_dir is None:
+    def read_and_show_config(self):
+        if self.get_configure() is False:
             self.m_rich_log.WriteText(u'获取配置参数失败，请检查movie_subs.ini中配置是否正确！\n')
             return
         self.subs_suffix_list = self.subs_suffix.split(',')
@@ -69,6 +68,10 @@ class MoviesSubsShootSubs(movies_subs_gui.ShootSubs):
         self.m_rich_log.WriteText(u'movies = %s\n' % self.movie_suffix)
         self.m_rich_log.WriteText(u'************************** Config ************************\n')
 
+    def do_init_config(self, event):
+        super(MoviesSubsShootSubs, self).do_init_config(event)
+        self.read_and_show_config()
+
     def __init__(self, parent):
         movies_subs_gui.ShootSubs.__init__(self, parent)
         self.root_dir, self.subs_suffix, self.movie_suffix = None, None, None
@@ -77,15 +80,23 @@ class MoviesSubsShootSubs(movies_subs_gui.ShootSubs):
 
     # Handlers for ShootSubs events.
     def do_ok_click(self, event):
-        self.m_dirPicker.SetFocus()
+        self.m_btn_ok.Enable(False)
+
         self.root_dir = self.m_dirPicker.GetPath()
-        set_configure_folder(self.root_dir)
+        if self.set_configure_folder(self.root_dir) is False:
+            self.m_rich_log.WriteText(u'保存配置参数失败，请检查movie_subs.ini中配置是否正确！\n')
+            return
+
+        self.m_rich_log.Clear()
+        self.read_and_show_config()
+
         root_dir_list = self.root_dir.split(',')
         for scan_dir in root_dir_list:
             self.m_rich_log.WriteText(u'开始处理目录：' + u'%s\n' % scan_dir)
             self.start_get_movie_subs(scan_dir)
 
         self.m_rich_log.WriteText(u'处理完成：' + u'%s\n' % self.root_dir)
+        self.m_btn_ok.Enable(True)
 
     def deal_with_file(self, filename):
         """
@@ -128,13 +139,14 @@ class MoviesSubsShootSubs(movies_subs_gui.ShootSubs):
             return
 
         for filename in os.listdir(scan_dir):
-            self.m_rich_log.WriteText(filename + '\n')
-            self.m_rich_log.ScrollLines(-1)
-            self.m_rich_log.Update()
-
-
             path = os.path.join(scan_dir, filename)
             if os.path.isdir(path):
                 self.start_get_movie_subs(path)
             else:
                 self.deal_with_file(u'%s' % path)
+
+            self.m_rich_log.WriteText(filename + '\n')
+            delimiter = "*" * 80 + '\n'
+            self.m_rich_log.WriteText(delimiter)
+            self.m_rich_log.ScrollLines(20)
+            self.m_rich_log.Update()
