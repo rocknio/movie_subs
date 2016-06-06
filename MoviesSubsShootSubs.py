@@ -140,12 +140,14 @@ class MoviesSubsShootSubs(movies_subs_gui.ShootSubs):
 
         for filename in os.listdir(scan_dir):
             path = os.path.join(scan_dir, filename)
+            # 打印正在处理的文件或目录名
+            self.m_rich_log.WriteText(path + '\n')
             if os.path.isdir(path):
                 self.start_get_movie_subs(path)
             else:
                 self.deal_with_file(u'%s' % path)
 
-            self.m_rich_log.WriteText(filename + '\n')
+            # 打印分隔符，光标移动到最后
             delimiter = "*" * 80 + '\n'
             self.m_rich_log.WriteText(delimiter)
             self.m_rich_log.ScrollLines(20)
