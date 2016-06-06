@@ -20,8 +20,7 @@ class ShootSubs ( wx.Dialog ):
     def __init__( self, parent ):
         wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"射手字幕下载器", pos = wx.DefaultPosition, size = wx.Size( 800,600 ), style = wx.DEFAULT_DIALOG_STYLE )
         
-        #self.SetSizeHintsSz( wx.Size( 800,600 ), wx.Size( 800,600 ) )
-        self.SetSizeHints(wx.Size( 800,600 ), wx.Size( 800,600 ))
+        self.SetSizeHintsSz( wx.Size( 800,600 ), wx.Size( 800,600 ) )
         
         fgSizer1 = wx.FlexGridSizer( 2, 1, 0, 0 )
         fgSizer1.SetFlexibleDirection( wx.BOTH )

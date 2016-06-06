@@ -3,8 +3,8 @@
 __author__ = 'Syn'
 
 from Shooter_hash import ShooterHash
-from urllib import parse
-from urllib import request
+from urllib import urlencode
+from urllib2 import Request, urlopen
 import json
 
 
@@ -13,20 +13,20 @@ class Shooter(object):
     实现射手网api
     """
     # 射手网api的调用url
-    shooter_url = "http://shooter.cn/api/subapi.php"
+    shooter_url = u"http://shooter.cn/api/subapi.php"
 
     def start(self):
         shoot_hash = ShooterHash(self.filename, self.richedit)
         self.movie_hash = shoot_hash.compute_file_hash()
         values = dict(filehash=self.movie_hash, pathinfo=self.filename, format="json", lang="Chn")
         try:
-            data = parse.urlencode(values).encode('utf-8', 'replace')
+            data = urlencode(values).encode('utf-8', 'replace')
         except Exception:
-            self.richedit.WriteText('url 编码失败，跳过文件 ' + u'%s' % self.filename + u'\n')
+            self.richedit.WriteText(u'url 编码失败，跳过文件 ' + u'%s' % self.filename + u'\n')
             return
 
-        req = request.Request(self.shooter_url, data)
-        rsp = request.urlopen(req)
+        req = Request(self.shooter_url, data)
+        rsp = urlopen(req)
         content = rsp.read().decode('utf-8', 'replace')
 
         # 解析返回的json串
@@ -51,15 +51,15 @@ class Shooter(object):
                     # print(download_link)
 
                     # 开始下载
-                    response = request.urlopen(download_link)
+                    response = urlopen(download_link)
                     download_content = response.read()
 
                     # 写字幕文件
                     with open(out_filename, 'wb') as output:
-                        self.richedit.WriteText('写入字幕文件：' + u'%s' % out_filename + u'\n')
+                        self.richedit.WriteText(u'写入字幕文件：' + u'%s' % out_filename + u'\n')
                         output.write(download_content)
-        except Exception:
-            self.richedit.WriteText('获取字幕返回码解析错误\n')
+        except Exception, e:
+            self.richedit.WriteText(u'获取字幕返回码解析错误! 错误：{}\n'.format(e))
 
     def __init__(self, filename, richedit):
         """
