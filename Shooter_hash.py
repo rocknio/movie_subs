@@ -15,7 +15,7 @@ class ShooterHash(object):
         try:
             f = open(self.filename, "rb")
         except IOError:
-            self.richedit.WriteText(u'打开文件失败：%s\n' % self.filename)
+            self.richedit.WriteText('打开文件失败：%s\n' % self.filename)
 
         # 获取文件长度
         stat_info = os.stat(self.filename)

@@ -22,7 +22,7 @@ class Shooter(object):
         try:
             data = parse.urlencode(values).encode('utf-8', 'replace')
         except Exception:
-            self.richedit.WriteText(u'url 编码失败，跳过文件 ' + u'%s' % self.filename + u'\n')
+            self.richedit.WriteText('url 编码失败，跳过文件 ' + u'%s' % self.filename + u'\n')
             return
 
         req = request.Request(self.shooter_url, data)
@@ -56,10 +56,10 @@ class Shooter(object):
 
                     # 写字幕文件
                     with open(out_filename, 'wb') as output:
-                        self.richedit.WriteText(u'写入字幕文件：' + u'%s' % out_filename + u'\n')
+                        self.richedit.WriteText('写入字幕文件：' + u'%s' % out_filename + u'\n')
                         output.write(download_content)
         except Exception:
-            self.richedit.WriteText(u'获取字幕返回码解析错误\n')
+            self.richedit.WriteText('获取字幕返回码解析错误\n')
 
     def __init__(self, filename, richedit):
         """
