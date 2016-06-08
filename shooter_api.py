@@ -59,7 +59,7 @@ class Shooter(object):
                         self.richedit.WriteText(u'写入字幕文件：' + u'%s' % out_filename + u'\n')
                         output.write(download_content)
         except Exception, e:
-            # self.richedit.WriteText(u'获取字幕返回码解析错误! 错误：{}\n'.format(e))
+            self.richedit.WriteText(u'没有找到字幕文件\n')
             pass
 
     def __init__(self, filename, richedit):
