@@ -21,8 +21,8 @@ class Shooter(object):
         values = dict(filehash=self.movie_hash, pathinfo=self.filename, format="json", lang="Chn")
         try:
             data = urlencode(values).encode('utf-8', 'replace')
-        except Exception:
-            self.richedit.WriteText(u'url 编码失败，跳过文件 ' + u'%s' % self.filename + u'\n')
+        except Exception, e:
+            self.richedit.WriteText(u'文件名不合法：' + u'%s' % self.filename + u'\n')
             return
 
         req = Request(self.shooter_url, data)
@@ -59,7 +59,8 @@ class Shooter(object):
                         self.richedit.WriteText(u'写入字幕文件：' + u'%s' % out_filename + u'\n')
                         output.write(download_content)
         except Exception, e:
-            self.richedit.WriteText(u'获取字幕返回码解析错误! 错误：{}\n'.format(e))
+            # self.richedit.WriteText(u'获取字幕返回码解析错误! 错误：{}\n'.format(e))
+            pass
 
     def __init__(self, filename, richedit):
         """
